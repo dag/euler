@@ -1,17 +1,18 @@
 sqrtCeiling = ceiling . sqrt . fromIntegral
 
-primes = 2 : 3 : filter primal [5, 7..]
+primes = 2 : 3 : filter primal [5, 7 ..]
   where
     primal n = all ((/= 0) . mod n)
-             $ takeWhile ((<= n) . (^2))
+             . takeWhile ((<= n) . (^2))
              $ tail primes
 
-factors n = foldl (++) []
-          $ map (\x -> [x,  n `div` x])
-          $ filter ((== 0) . mod n) [1..sqrtCeiling n]
+factors n =
+  do
+    x <- filter ((== 0) . mod n) [1 .. sqrtCeiling n]
+    [x, n `div` x]
 
-main = print
-     $ foldl max 0
+
+main = print . maximum
      $ filter (`elem` primes') factors'
   where
     factors' = factors num
